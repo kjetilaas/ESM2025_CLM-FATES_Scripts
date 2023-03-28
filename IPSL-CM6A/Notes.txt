@@ -1,0 +1,2 @@
+Run preproc_forcing.sh
+./forc_submit.sh -a nn2806k -w 48:00:00 -g IPSL-CM6A-LR -o  /cluster/work/users/kjetisaa/isimip_forc -s historical -p historical -u
