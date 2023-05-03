@@ -2,5 +2,6 @@ Run preproc_forcing.sh script:
 ./forc_submit.sh -a nn2806k -w 24:00:00 -g UKESM1-0-LL -o  /cluster/work/users/kjetisaa/isimip_forc -s historical -p historical -u
 
 NB: too short time. Need to rerun final years....
+Done
 
 
