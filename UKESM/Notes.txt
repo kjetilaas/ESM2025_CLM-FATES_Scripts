@@ -4,4 +4,11 @@ Run preproc_forcing.sh script:
 NB: too short time. Need to rerun final years....
 Done
 
+Ran ADspinup.sh (300 yrs, 3.12% in equlibirium)
+
+Updated CLM version to use NorESMhub/CTSM (tag CTSM5.1.dev123 instead of CTSM5.1dev120)
+Run ADspinup2.sh to check if update affects spinup substantially.
+
+Start PostADspinpu.sh (700 years) in case new CLM version is not substantially different.  
+
 

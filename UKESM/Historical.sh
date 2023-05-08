@@ -27,7 +27,7 @@ stop_n="55"
 stop_opt="nyears"
 job_wc_time="48:00:00"
 resub="2" 
-lastrestarttime="1000-01-01-00000" 
+lastrestarttime="1001-01-01-00000" 
 
 if [[ $forcenewcase -eq 1 ]]
 echo $casedir$casename
@@ -63,6 +63,9 @@ echo 'updating settings'
 echo "flanduse_timeseries='/cluster/work/users/kjetisaa/isimip_forc/Ohter_modified_files/landuse.timeseries_1.9x2.5_hist_78pfts_CMIP6_simyr1850-2015_ESM2025.nc'" >> user_nl_clm
 echo "fsurdat='/cluster/work/users/kjetisaa/isimip_forc/Ohter_modified_files/surfdata_1.9x2.5_hist_78pfts_CMIP6_simyr1850_ESM2025.nc'" >> user_nl_clm
 echo "use_init_interp=.true." >> user_nl_clm
+echo "stream_fldfilename_ndep = '/cluster/work/users/kjetisaa/isimip_forc/Ohter_modified_files/fndep_clm_hist_b.e21.BWHIST.f09_g17.CMIP6-historical-WACCM.ensmean_1849-2015_monthly_0.9x1.25_ESM2025.nc'" >> user_nl_clm
+
+echo "co2tseries.20tr:datafiles=/cluster/work/users/kjetisaa/isimip_forc/Ohter_modified_files/fco2_datm_global_simyr_1750-2014_CMIP6_ESM2025.nc" >> user_nl_datm_streams
 
 # copy restart files and pointers
 cp /cluster/work/users/kjetisaa/archive/$casename_AD/rest/$lastrestarttime/*clm.r*.nc /cluster/work/users/kjetisaa/noresm/$casename/run/
