@@ -13,8 +13,11 @@ Start PostADspinpu.sh (700 years) in case new CLM version is not substantially d
 Result after 700 years: 5.68% of gridcells not in equlitbrium. -> OK, since these are not key areas of interst and close to equlibirium (see ESM2025_UKESM1-0-LL_BGC-CROP_1850_f19_g17_postADspinup_Spinup.png)
 
 Starting historical (using Historical.sh)
+Compleated Historical
 
 Running ssp forcing scripts:
  ./forc_submit.sh -a nn9188k -w 24:00:00 -g UKESM1-0-LL -o  /cluster/work/users/kjetisaa/isimip_forc -s ssp126 -p future -u -m betzy
+ ./forc_submit.sh -a nn9188k -w 24:00:00 -g UKESM1-0-LL -o  /cluster/work/users/kjetisaa/isimip_forc -s ssp370 -p future -u -m betzy
+Compleated forcing scripts
 
-
+Started SSP126 noluc and agtonat simulations.
