@@ -1,3 +1,4 @@
+UKESM:
 Run preproc_forcing.sh script:
 ./forc_submit.sh -a nn2806k -w 24:00:00 -g UKESM1-0-LL -o  /cluster/work/users/kjetisaa/isimip_forc -s historical -p historical -u
 
@@ -21,3 +22,15 @@ Running ssp forcing scripts:
 Compleated forcing scripts
 
 Started SSP126 noluc and agtonat simulations.
+
+IPSL-CM6A:
+- produced forcing using forc_submit.sh
+- ran ADspinup.sh (300 yrs, ok)
+- ran PostADspinup.sh (700 years, ok)
+- ran historical
+
+MPI-ESM1:
+- produced forcing using forc_submit.sh
+- ran ADspinup.sh (300 yrs, ok)
+- ran PostADspinup.sh (700 years, ok)
+- ran historical

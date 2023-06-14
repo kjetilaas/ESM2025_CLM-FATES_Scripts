@@ -35,7 +35,7 @@ begin
 ;=======================================================================;
 
 ; GLOBAL EXAMPLE
-  caseid = "ESM2025_MPI-ESM1-2-HR_BGC-CROP_1850_f19_g17_ADspinup"
+  caseid = "ESM2025_MPI-ESM1-2-HR_BGC-CROP_1850_f19_g17_postADspinup"
   username = "kjetisaa"
   annual_hist = True
   region = "Global"              ; Global, Arctic, or SPT (single point)
