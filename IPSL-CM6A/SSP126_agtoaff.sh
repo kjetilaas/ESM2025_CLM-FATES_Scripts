@@ -6,7 +6,7 @@ project='nn9188k' #nn8057k: EMERALD, nn2806k: METOS, nn9188k: CICERO
 machine='betzy'
 numCPUs=1024 #Specify number of cpus. 0: use default
 forcenewcase=1 #what to do if case exists. 1: remove
-model=UKESM1-0-LL #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
+model=IPSL-CM6A-LR #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
 
 #Setup 
 modelconfig="BGC-CROP" 

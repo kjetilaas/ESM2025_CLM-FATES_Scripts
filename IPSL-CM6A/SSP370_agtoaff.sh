@@ -6,14 +6,14 @@ project='nn9188k' #nn8057k: EMERALD, nn2806k: METOS, nn9188k: CICERO
 machine='betzy'
 numCPUs=1024 #Specify number of cpus. 0: use default
 forcenewcase=1 #what to do if case exists. 1: remove
-model=UKESM1-0-LL #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
+model=IPSL-CM6A-LR #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
 
 #Setup 
 modelconfig="BGC-CROP" 
 resolution="f19_g17" 
-scenario="SSP126" 
-scenario_name2="ssp126"
-scenario_name3="SSP1-2.6" 
+scenario="SSP370" 
+scenario_name2="ssp370"
+scenario_name3="SSP3-7.0" 
 versiontag="agtoaff"
 casename="ESM2025_${model}_${modelconfig}_${scenario}_${resolution}_$versiontag"
 compset="${scenario}_DATM%GSWP3v1_CLM51%${modelconfig}_SICE_SOCN_SROF_SGLC_SWAV_SESP"
@@ -69,7 +69,7 @@ echo "stream_fldfilename_ndep = '/cluster/work/users/kjetisaa/isimip_forc/Ohter_
 #Extra history files (copied from djk2120 Trendy simulations, probably needs modifications)
 echo "hist_mfilt = 1,1" >> user_nl_clm
 echo "hist_nhtfrq = 0,0" >> user_nl_clm
-echo "hist_fincl2 = 'FSDS', 'FSR', 'FIRA', 'FCEV', 'FCTR', 'FGEV', 'H2OSNO', 'FSH', 'TLAI', 'TOTVEGC','TOTSOMC', 'NPP_NUPTAKE', 'GPP','HTOP','NBP','NPP', 'HR'" >> user_nl_clm
+echo "hist_fincl2 = 'TSA', 'RAIN', 'SNOW', 'FSDS', 'SOILWATER_10CM', 'SOILLIQ', 'SOILICE', 'QRUNOFF', 'QVEGE','QVEGT','QSOIL', 'TLAI','FCEV','FCTR','FGEV','FSH','GPP','HTOP','NBP','NPP','TOTVEGC','TV','GRAINC_TO_FOOD'" >> user_nl_clm
 echo "hist_dov2xy = .true.,.false." >> user_nl_clm
 
 

@@ -59,7 +59,8 @@ for variable in variables:
                     var_total_rolling = var_total.rolling(time=window_size, center=True).mean()
 
                     # Plot the timeseries with the corresponding color and label
-                     var_total_rolling.plot(ax=ax, label=f"{scenario} - {experiment}", color=colors[i], linestyle=line_styles[j], marker=markers[k])
+                    # var_total_rolling.plot(ax=ax, label=f"{scenario} - {experiment}", color=colors[i], linestyle=line_styles[j], marker=markers[k])
+                     var_total_rolling.plot(ax=ax, label=f"{scenario} - {experiment}", color=colors[i], linestyle=line_styles[j])
 
                 except FileNotFoundError:
                     print(f"File not found for {experiment} - {scenario} - {model}. Skipping...")
