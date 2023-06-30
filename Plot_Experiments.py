@@ -2,10 +2,10 @@ import xarray as xr
 import nc_time_axis
 import matplotlib.pyplot as plt
 
-models = ["UKESM1-0-LL", "IPSL-CM6A-LR", "MPI-ESM1-2-HR"] #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
-scenarios = ["SSP126", "SSP370"]
-experiments = ["noluc", "agtonat", "agtoaff", "nattoaff", "agtobio"]
-colors = ["blue", "orange", "green", "red", "purple"]
+models = ["UKESM1-0-LL"] #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
+scenarios = ["SSP126", "SSP370"] #"SSP126",
+experiments = ["noluc", "agtonat", "agtoaff", "nattoaff", "agtobio", "nattobio"]
+colors = ["blue", "orange", "green", "red", "purple", "yellow"]
 line_styles = ["-", "--"]
 markers = ["o", "s", "D"]
 
@@ -60,7 +60,7 @@ for variable in variables:
 
                     # Plot the timeseries with the corresponding color and label
                     # var_total_rolling.plot(ax=ax, label=f"{scenario} - {experiment}", color=colors[i], linestyle=line_styles[j], marker=markers[k])
-                     var_total_rolling.plot(ax=ax, label=f"{scenario} - {experiment}", color=colors[i], linestyle=line_styles[j])
+                    var_total_rolling.plot(ax=ax, label=f"{scenario} - {experiment}", color=colors[i], linestyle=line_styles[j])
 
                 except FileNotFoundError:
                     print(f"File not found for {experiment} - {scenario} - {model}. Skipping...")

@@ -2,14 +2,12 @@
 module load CDO/1.9.10-gompi-2020b
 
 # define paths
-model=MPI-ESM1-2-HR #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
-scenario="SSP370"
+model=UKESM1-0-LL #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
+scenario="SSP126"
 
 # loop over experiments:
-# noluc, agtonat, agtoaff, nattoaff, agtobio
-
-#experiments=("noluc" "agtonat" "agtoaff" "nattoaff" "agtobio")
-experiments=("noluc")
+experiments=("noluc" "agtonat" "agtoaff" "nattoaff" "agtobio" "nattobio")
+#experiments=("noluc")
 
 # begin loop
 for experiment in "${experiments[@]}"
