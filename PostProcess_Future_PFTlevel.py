@@ -1,20 +1,21 @@
 import netCDF4 as nc
 import numpy as np
 import glob
+import os.path
 
 #Script to post process ESM2025 simulations on PFT level. 
 #Based on Daniel's scrip: https://github.com/djk2120/ctsm_trendy_2022/blob/master/post/make_gcp2022_bypft_output_files.py
 #Requires CLM output to be merged to one file pr variable (with "PostProcess_ESM2025_pftlevel.sh")
 
-models = ["UKESM1-0-LL", "IPSL-CM6A-LR", "MPI-ESM1-2-HR"] #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
-scenarios = ["SSP126", "SSP370"] #"SSP126",
+models = ["UKESM1-0-LL", "IPSL-CM6A-LR", "MPI-ESM1-2-HR"] 
+scenarios = ["SSP126", "SSP370"] 
 experiments = ["noluc", "agtonat", "agtoaff", "nattoaff", "agtobio", "nattobio"]
-vars_in = ['TLAI', 'FCTR', 'TOTVEGC', 'GPP', 'NPP', 'NBP', 'TV', 'HTOP']
+vars_in = ['TLAI', 'FCTR', 'TOTVEGC', 'GPP', 'NPP', 'TV', 'HTOP'] #, 'NBP'
 
 #models = ["UKESM1-0-LL"] #IPSL-CM6A-LR, MPI-ESM1-2-HR, UKESM1-0-LL
 #scenarios = ["SSP126"] #"SSP126",
 #experiments = ["noluc"]
-#vars_in = ['TOTVEGC']
+#vars_in = ['TLAI', 'FCTR', 'TOTVEGC', 'GPP', 'NPP', 'TV', 'HTOP']
 
 d='/cluster/work/users/kjetisaa/PostProcessed_archive/Temp_results_PFTlevel/'
 datadir_out = '/cluster/work/users/kjetisaa/PostProcessed_archive/ESM2025_WP10_postprocessed_pftlevel/'
@@ -222,7 +223,8 @@ npft = 79
 for k, model in enumerate (models):
     for i, experiment in enumerate(experiments):
         for j, scenario in enumerate(scenarios):
-            
+            coord_read = False
+
             dcoord='/cluster/work/users/kjetisaa/archive/ESM2025_'+model+'_BGC-CROP_'+scenario+'_f19_g17_'+experiment+'/lnd/hist/'
             fnamecoord='ESM2025_'+model+'_BGC-CROP_'+scenario+'_f19_g17_'+experiment+'.clm2.h1.2100-12.nc'
             
@@ -234,141 +236,174 @@ for k, model in enumerate (models):
                 fname='clm_'+model.lower()+'_'+scenario.lower()+'_'+experiment+'_'+varname+'.monthly.h1_RAW.nc'
 
                 filename=d+fname 
-                filein=nc.Dataset(filename)        
-
-                #
-                if var_i == 0:
-                    lats = pftcoords_file.variables['lat']
-                    lons = pftcoords_file.variables['lon']
-                    time = filein.variables['time']
-                    time_bnds = filein.variables['time_bnds']
-                    ntime_monthly = len(time[:])
-                    ntime_annual = ntime_monthly / 12
-                    JM = len(lats[:])
-                    IM = len(lons[:])
-                locals()[varname] = separate_clmhist_bypft(filein, variable_name=varname, IM=IM, JM=JM, npft=npft, pftcoords_file=pftcoords_file)
-                #
+                if os.path.isfile(filename):
+                    filein=nc.Dataset(filename)        
+                    #
+                    if coord_read:
+                        print('Coordinates already read')
+                    else:
+                        print('Reading coodinates')                        
+                        lats = pftcoords_file.variables['lat']
+                        lons = pftcoords_file.variables['lon']
+                        time = filein.variables['time']
+                        time_bnds = filein.variables['time_bnds']
+                        ntime_monthly = len(time[:])
+                        ntime_annual = ntime_monthly / 12
+                        JM = len(lats[:])
+                        IM = len(lons[:])
+                        coord_read = True
+                    locals()[varname] = separate_clmhist_bypft(filein, variable_name=varname, IM=IM, JM=JM, npft=npft, pftcoords_file=pftcoords_file)
+                    #
+                else:
+                    print("File not read:"+filename)
             
 
             exp_outputname = 'clm_'+model.lower()+ '_' +scenario.lower()+ '_' +experiment+'_'
-            
+
+
+            #Write new PFT level files. Should be rewritten to not duplicate code...
+
             #############   lai   #############
             varname_out = 'lai'
             varname_in = 'TLAI'
             unit_conversion = 1.
-            print(' test 1 '+varname_out)
+            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'              
             try:
                 list_index = vars_out.index(varname_out)
             except:
                 list_index = -1
             
-            data_out = locals()[varname_in][:,:,:,:] * unit_conversion
-            np.ma.set_fill_value(data_out, -99999.)        
-            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'            
-            write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
-            del data_out
+            try:
+                data_out = locals()[varname_in][:,:,:,:] * unit_conversion
+                np.ma.set_fill_value(data_out, -99999.)                                  
+                write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
+                del data_out
+            except:
+                print("File not written:"+filename_out)
 
             #############   cVegpft   #############
             varname_out = 'cVegpft'
             varname_in = 'TOTVEGC'
             unit_conversion = 1.e-3
+            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'                          
             try:
                 list_index = vars_out.index(varname_out)
             except:
                 list_index = -1
 
-            data_out = locals()[varname_in][:,:,:,:] * unit_conversion
-            np.ma.set_fill_value(data_out, -99999.)        
-            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'            
-            write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
-            del data_out
+            try:
+                data_out = locals()[varname_in][:,:,:,:] * unit_conversion
+                np.ma.set_fill_value(data_out, -99999.)                    
+                write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
+                del data_out
+            except:
+                print("File not written:"+filename_out)
 
             #############   transpft   #############
             varname_out = 'transpft'
             varname_in = 'FCTR'
             unit_conversion = 1.
+            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'                          
             try:
                 list_index = vars_out.index(varname_out)
             except:
                 list_index = -1            
 
-            data_out = locals()[varname_in][:,:,:,:] * unit_conversion
-            np.ma.set_fill_value(data_out, -99999.)        
-            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'            
-            write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
-            del data_out
+            try:
+                data_out = locals()[varname_in][:,:,:,:] * unit_conversion
+                np.ma.set_fill_value(data_out, -99999.)          
+                write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
+                del data_out
+            except:
+                print("File not written:"+filename_out)
 
             #############   gpppft   #############
             varname_out = 'gpppft'
             varname_in = 'GPP'
             unit_conversion = 1.e-3
+            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'                          
             try:
                 list_index = vars_out.index(varname_out)
             except:
                 list_index = -1
 
-            data_out = locals()[varname_in][:,:,:,:] * unit_conversion
-            np.ma.set_fill_value(data_out, -99999.)        
-            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'            
-            write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
-            del data_out
+            try:
+                data_out = locals()[varname_in][:,:,:,:] * unit_conversion
+                np.ma.set_fill_value(data_out, -99999.)                   
+                write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
+                del data_out
+            except:
+                print("File not written:"+filename_out)
 
             #############   npppft   #############
             varname_out = 'npppft'
             varname_in = 'NPP'
             unit_conversion = 1.e-3
+            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'                          
             try:
                 list_index = vars_out.index(varname_out)
             except:
                 list_index = -1
 
-            data_out = locals()[varname_in][:,:,:,:] * unit_conversion
-            np.ma.set_fill_value(data_out, -99999.)        
-            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'            
-            write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
-            del data_out
+            try:
+                data_out = locals()[varname_in][:,:,:,:] * unit_conversion
+                np.ma.set_fill_value(data_out, -99999.)                    
+                write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
+                del data_out
+            except:
+                print("File not written:"+filename_out)
 
-            #############   npppft   #############
+            #############   nbppft   #############
+            #---Not a PFT level variable---
             varname_out = 'nbppft'
             varname_in = 'NBP'
             unit_conversion = 1.e-3
+            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'                          
             try:
                 list_index = vars_out.index(varname_out)
             except:
                 list_index = -1
-
-            data_out = locals()[varname_in][:,:,:,:] * unit_conversion
-            np.ma.set_fill_value(data_out, -99999.)        
-            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'            
-            write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
-            del data_out
+            
+            try:
+                data_out = locals()[varname_in][:,:,:,:] * unit_conversion
+                np.ma.set_fill_value(data_out, -99999.)                    
+                write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
+                del data_out
+            except:
+                print("File not written:"+filename_out)
 
             #############   tskinpft   #############
             varname_out = 'tskinpft'
             varname_in = 'TV'
             unit_conversion = 1.
+            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'                          
             try:
                 list_index = vars_out.index(varname_out)
             except:
                 list_index = -1
 
-            data_out = locals()[varname_in][:,:,:,:] * unit_conversion
-            np.ma.set_fill_value(data_out, -99999.)        
-            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'            
-            write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
-            del data_out
+            try:
+                data_out = locals()[varname_in][:,:,:,:] * unit_conversion
+                np.ma.set_fill_value(data_out, -99999.)                   
+                write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
+                del data_out
+            except:
+                print("File not written:"+filename_out)
 
             #############   theightpft   #############
             varname_out = 'theightpft'
             varname_in = 'HTOP'
             unit_conversion = 1.
+            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'                          
             try:
                 list_index = vars_out.index(varname_out)
             except:
                 list_index = -1
 
-            data_out = locals()[varname_in][:,:,:,:] * unit_conversion
-            np.ma.set_fill_value(data_out, -99999.)        
-            filename_out = datadir_out + exp_outputname + varname_out +'.monthly.nc'            
-            write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
-            del data_out                
+            try:
+                data_out = locals()[varname_in][:,:,:,:] * unit_conversion
+                np.ma.set_fill_value(data_out, -99999.)                    
+                write_outfile(data_out=data_out, filename_out=filename_out, varname_out=varname_out)             
+                del data_out
+            except:
+                print("File not written:"+filename_out)             
