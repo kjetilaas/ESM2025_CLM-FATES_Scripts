@@ -221,8 +221,11 @@ npft = 79
 #scenario='SSP126'
 
 for k, model in enumerate (models):
+    print('starting model '+model)
     for i, experiment in enumerate(experiments):
+        print('starting experiment '+experiment)
         for j, scenario in enumerate(scenarios):
+            print('starting scenario '+scenario)
             coord_read = False
 
             dcoord='/cluster/work/users/kjetisaa/archive/ESM2025_'+model+'_BGC-CROP_'+scenario+'_f19_g17_'+experiment+'/lnd/hist/'
@@ -232,6 +235,7 @@ for k, model in enumerate (models):
 
             for var_i, varname in enumerate(vars_in):
                 print('starting var '+varname)
+                locals()[varname] = None
                 #
                 fname='clm_'+model.lower()+'_'+scenario.lower()+'_'+experiment+'_'+varname+'.monthly.h1_RAW.nc'
 
