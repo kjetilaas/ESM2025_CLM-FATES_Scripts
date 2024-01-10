@@ -26,7 +26,7 @@ mkdir -p $casedir
 
 stop_n="86"
 stop_opt="nyears"
-job_wc_time="18:00:00"
+job_wc_time="30:00:00"
 resub="0" 
 lastrestarttime="2015-01-01-00000" 
 

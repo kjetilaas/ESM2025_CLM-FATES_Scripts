@@ -26,7 +26,7 @@ mkdir -p $casedir
 
 stop_n="86"
 stop_opt="nyears"
-job_wc_time="18:00:00"
+job_wc_time="30:00:00"
 resub="0" 
 lastrestarttime="2015-01-01-00000" 
 
@@ -69,7 +69,7 @@ echo "stream_fldfilename_ndep = '/cluster/work/users/kjetisaa/isimip_forc/Ohter_
 #Extra history files (copied from djk2120 Trendy simulations, probably needs modifications)
 echo "hist_mfilt = 1,1" >> user_nl_clm
 echo "hist_nhtfrq = 0,0" >> user_nl_clm
-echo "hist_fincl2 = 'FSDS', 'FSR', 'FIRA', 'FCEV', 'FCTR', 'FGEV', 'H2OSNO', 'FSH', 'TLAI', 'TOTVEGC','TOTSOMC', 'NPP_NUPTAKE', 'GPP','HTOP','NBP','NPP', 'HR'" >> user_nl_clm
+echo "hist_fincl2 = 'TSA', 'RAIN', 'SNOW', 'FSDS', 'SOILWATER_10CM', 'SOILLIQ', 'SOILICE', 'QRUNOFF', 'QVEGE','QVEGT','QSOIL', 'TLAI','FCEV','FCTR','FGEV','FSH','GPP','HTOP','NBP','NPP','TOTVEGC','TV','GRAINC_TO_FOOD'" >> user_nl_clm
 echo "hist_dov2xy = .true.,.false." >> user_nl_clm
 
 
